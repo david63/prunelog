@@ -38,9 +38,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 	'LOG_PRUNE_LOG'				=> '<strong>Log file pruned</strong>',
-	
+
 	'PRUNE_LOG_DAYS'			=> 'Prune log file days',
 	'PRUNE_LOG_DAYS_EXPLAIN'	=> 'The number of days to leave entries in the log files.<br>Setting this to zero will disable the pruning of the log files.',
 ));
-
-?>
