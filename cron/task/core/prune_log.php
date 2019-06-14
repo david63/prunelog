@@ -31,17 +31,19 @@ class prune_log extends \phpbb\cron\task\base
 	/**
 	* Constructor.
 	*
-	* @param phpbb_config		$config	The config
-	* @param phpbb_db_driver	$db		The db connection
-	* @param \phpbb\log\log		$log	Log object
-	* @param \phpbb\user		$user	User object
+	* @param phpbb_config		$config		The config
+	* @param phpbb_db_driver	$db			The db connection
+	* @param \phpbb\log\log		$log		Log object
+	* @param \phpbb\user		$user		User object
+	* @param array				$tables		phpBB db tables
 	*/
-	public function __construct(config $config, driver_interface $db, log $log, user $user)
+	public function __construct(config $config, driver_interface $db, log $log, user $user, $tables)
 	{
 		$this->config	= $config;
 		$this->db		= $db;
 		$this->log		= $log;
 		$this->user		= $user;
+		$this->tables	= $tables;
 	}
 
 	/**
@@ -55,7 +57,7 @@ class prune_log extends \phpbb\cron\task\base
 		{
 			$last_log = time() - ($this->config['prune_log_days'] * $this->config['prune_log_gc']);
 
-			$sql = 'DELETE FROM ' . LOG_TABLE . '
+			$sql = 'DELETE FROM ' . $this->tables['log'] . '
 				WHERE log_time < ' . $last_log . '
 					AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_WARNING_BODY', true) . '
 					AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_GENERAL', true);

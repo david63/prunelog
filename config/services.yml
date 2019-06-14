@@ -1,3 +1,6 @@
+imports:
+    - { resource: phpbb_tables.yml }
+
 services:
     david63.prunelog.listener:
         class: david63\prunelog\event\listener
@@ -12,6 +15,7 @@ services:
             - '@dbal.conn'
             - '@log'
             - '@user'
+            - 'tables'
         calls:
             - [set_name, [cron.task.core.prune_log]]
         tags:
