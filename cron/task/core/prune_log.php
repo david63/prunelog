@@ -28,14 +28,17 @@ class prune_log extends \phpbb\cron\task\base
 	/** @var \phpbb\user */
 	protected $user;
 
+	/** @var string custom tables */
+	protected $tables;
+
 	/**
 	* Constructor.
 	*
-	* @param phpbb_config		$config		The config
-	* @param phpbb_db_driver	$db			The db connection
-	* @param \phpbb\log\log		$log		Log object
-	* @param \phpbb\user		$user		User object
-	* @param array				$tables		phpBB db tables
+	* @param \phpbb\config\config	$config		Config object
+	* @param \phpbb_db_driver		$db			The db connection
+	* @param \phpbb\log\log			$log		Log object
+	* @param \phpbb\user			$user		User object
+	* @param array					$tables		phpBB db tables
 	*/
 	public function __construct(config $config, driver_interface $db, log $log, user $user, $tables)
 	{
@@ -53,20 +56,17 @@ class prune_log extends \phpbb\cron\task\base
 	*/
 	public function run()
 	{
-		if ($this->config['prune_log_days'] > 0)
-		{
-			$last_log = time() - ($this->config['prune_log_days'] * $this->config['prune_log_gc']);
+		$last_log = time() - ($this->config['prune_log_days'] * 86400);
 
-			$sql = 'DELETE FROM ' . $this->tables['log'] . '
-				WHERE log_time < ' . $last_log . '
-					AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_WARNING_BODY', true) . '
-					AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_GENERAL', true);
-			$this->db->sql_query($sql);
+		$sql = 'DELETE FROM ' . $this->tables['log'] . '
+			WHERE log_time < ' . $last_log . '
+				AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_WARNING_BODY', true) . '
+				AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_GENERAL', true);
+		$this->db->sql_query($sql);
 
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_PRUNE_LOG');
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'LOG_PRUNE_LOG');
 
-			$this->config->set('prune_log_last_gc', time(), true);
-		}
+		$this->config->set('prune_log_last_gc', time(), true);
 	}
 
 	/**
@@ -87,6 +87,6 @@ class prune_log extends \phpbb\cron\task\base
 	*/
 	public function should_run()
 	{
-		return $this->config['prune_log_days'] > 0 && time() > ($this->config['prune_log_last_gc'] + $this->config['prune_log_gc']);
+		return $time() > ($this->config['prune_log_last_gc'] + 86400);
 	}
 }

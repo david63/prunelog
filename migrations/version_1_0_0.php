@@ -17,7 +17,6 @@ class version_1_0_0 extends migration
 	{
 		return array(
 			array('config.add', array('prune_log_days', '30')),
-			array('config.add', array('prune_log_gc', '86400')),
 			array('config.add', array('prune_log_last_gc', '0')),
 		);
 	}

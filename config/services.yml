@@ -15,7 +15,7 @@ services:
             - '@dbal.conn'
             - '@log'
             - '@user'
-            - 'tables'
+            - '%tables%'
         calls:
             - [set_name, [cron.task.core.prune_log]]
         tags:
