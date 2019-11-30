@@ -87,6 +87,6 @@ class prune_log extends \phpbb\cron\task\base
 	*/
 	public function should_run()
 	{
-		return $time() > ($this->config['prune_log_last_gc'] + 86400);
+		return time() > ($this->config['prune_log_last_gc'] + 86400);
 	}
 }
