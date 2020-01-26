@@ -59,7 +59,7 @@ class prune_log extends \phpbb\cron\task\base
 		$last_log = time() - ($this->config['prune_log_days'] * 86400);
 
 		$sql = 'DELETE FROM ' . $this->tables['log'] . '
-			WHERE log_time < ' . $last_log . '
+			WHERE log_time < ' . (int) $last_log . '
 				AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_WARNING_BODY', true) . '
 				AND ' . $this->db->sql_in_set('log_operation', 'LOG_USER_GENERAL', true);
 		$this->db->sql_query($sql);
