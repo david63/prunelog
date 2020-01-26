@@ -1,6 +1,3 @@
-imports:
-    - { resource: phpbb_tables.yml }
-
 services:
     david63.prunelog.listener:
         class: david63\prunelog\event\listener
