@@ -17,3 +17,6 @@ services:
             - [set_name, [cron.task.core.prune_log]]
         tags:
             - { name: cron.task }
+
+    _defaults:
+        public: true
